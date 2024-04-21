@@ -6,19 +6,19 @@ import axiosInstance from "@/lib/axiosConfig";
 import { useEffect } from "react";
 
 export default function Home() {
-  useEffect(() => {
-    axiosInstance
-      .get("", {
-        params: {
-          lat: 40.7127281,
-          lon: -74.0060152,
-          exclude: "minutely",
-        },
-      })
-      .then((res) => {
-        console.log("res", res);
-      });
-  }, []);
+  // useEffect(() => {
+  //   axiosInstance
+  //     .get("", {
+  //       params: {
+  //         lat: 40.7127281,
+  //         lon: -74.0060152,
+  //         exclude: "minutely",
+  //       },
+  //     })
+  //     .then((res) => {
+  //       console.log("res", res);
+  //     });
+  // }, []);
 
   return (
     <main className=" w-screen h-screen sm:px-10 py-5">
