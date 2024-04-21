@@ -37,7 +37,7 @@ function WeatherHighlights() {
     },
   ];
   return (
-    <div className="flex flex-col min-h-fit gap-4">
+    <div className="flex flex-col min-h-fit gap-4 grow">
       <div className="font-medium grow-0">Today&#39;s Highlights</div>
       <div className="grid grid-cols-3 grid-rows-12 gap-4 grow w-full h-full">
         {highlightsList.map(({ id, cardType, title }) => {
