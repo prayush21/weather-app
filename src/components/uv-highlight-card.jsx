@@ -1,7 +1,6 @@
 import React from "react";
 
 function UVHighlightCard({ title, id }) {
-  console.log("id", id);
   return (
     <div
       key={id}

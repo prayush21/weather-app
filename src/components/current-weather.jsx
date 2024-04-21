@@ -17,8 +17,8 @@ function CurrentWeather() {
         <span className="text-gray-400">16:00</span>
       </div>
       <hr></hr>
-      <div className=" text-xs font-normal">Mostly Cloudy</div>
-      <div className=" text-xs font-normal">Rain - 30%</div>
+      <div className=" text-sm font-normal">Mostly Cloudy</div>
+      <div className=" text-sm font-normal">Rain - 30%</div>
     </div>
   );
 }
