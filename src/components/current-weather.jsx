@@ -5,9 +5,10 @@ function CurrentWeather() {
   return (
     <div className=" w-full flex flex-col gap-3">
       <Image
+        className="self-center"
         src={weatherIconSvg}
-        height={280}
-        width={280}
+        height={200}
+        width={200}
         alt="current-weather-icon"
       />
       <div className=" text-6xl">12&deg;C</div>
