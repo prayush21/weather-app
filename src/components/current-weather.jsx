@@ -3,6 +3,9 @@ import Image from "next/image";
 import weatherIconSvg from "../../public/weatherIcon.svg";
 import { useSelector } from "react-redux";
 import { displayTemp, weekDayMap } from "@/lib/utils";
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
+
 import W01dIcon from "../../public/weather/01d@2x.png";
 import W02dIcon from "../../public/weather/02d@2x.png";
 import W03dIcon from "../../public/weather/03d@2x.png";
@@ -45,6 +48,7 @@ const iconMap = {
 
 function CurrentWeather() {
   const current = useSelector((state) => state.weather.cityWeather.current);
+  const status = useSelector((state) => state.weather.status);
   const temperatureUnit = useSelector((state) => state.weather.temperatureUnit);
   const today = new Date();
   const main = Array.isArray(current?.weather)
@@ -53,33 +57,49 @@ function CurrentWeather() {
   const icon = Array.isArray(current?.weather)
     ? current?.weather[0]?.icon
     : "-";
-
+  console.log("status", status);
   return (
     <div className=" w-full flex flex-col gap-3 grow justify-evenly py-4 px-1">
-      <Image
-        className="self-center"
-        src={iconMap[icon]}
-        height={180}
-        width={180}
-        alt="current-weather-icon"
-      />
-      <div style={{ fontWeight: "300" }} className="text-8xl">
-        {displayTemp(current.temp, temperatureUnit)}
-        <span className=" text-4xl">&deg;{temperatureUnit}</span>
-      </div>
+      {status == "idle" ? (
+        <Image
+          className="self-center"
+          src={iconMap[icon]}
+          height={180}
+          width={180}
+          alt="current-weather-icon"
+        />
+      ) : (
+        <Skeleton height={180} circle />
+      )}
+      {status == "idle" ? (
+        <div style={{ fontWeight: "300" }} className="text-8xl">
+          {displayTemp(current.temp, temperatureUnit)}
+          <span className=" text-4xl">&deg;{temperatureUnit}</span>
+        </div>
+      ) : (
+        <Skeleton height={90} />
+      )}
       <div className="">
         <span className="">{weekDayMap[today.getDay()]}, </span>
-        <span className="text-gray-400">
+        <span className=" align-top text-gray-400">
           {today.getHours().toString().padStart(2, 0)}:
           {today.getMinutes().toString().padStart(2, 0)}
         </span>
       </div>
       <hr></hr>
-      <div className=" text-sm font-normal">{main}</div>
-      <div className=" text-sm font-normal">
-        Feels like {displayTemp(current.feels_like, temperatureUnit)}&deg;
-        {temperatureUnit}
-      </div>
+      {status == "idle" ? (
+        <div className=" text-sm font-normal">{main}</div>
+      ) : (
+        <Skeleton count={1} />
+      )}
+      {status == "idle" ? (
+        <div className=" text-sm font-normal">
+          Feels like {displayTemp(current.feels_like, temperatureUnit)}&deg;
+          {temperatureUnit}
+        </div>
+      ) : (
+        <Skeleton count={1} />
+      )}
     </div>
   );
 }

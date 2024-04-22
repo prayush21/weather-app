@@ -9,7 +9,9 @@ function City() {
     (state) => state.weather.currentCityIndex
   );
   const { name, state, country } = cityOptions[currentCityIndex] ?? "";
-  const nameTitle = `${name}, ${state ? `${state},` : ""} ${country}`;
+  const nameTitle = name
+    ? `${name}, ${state ? `${state},` : ""} ${country}`
+    : "Current Location";
   const [srcImage, setSrcImage] = useState(NewYork);
 
   useEffect(() => {

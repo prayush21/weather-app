@@ -32,6 +32,7 @@ function SearchInput() {
   }
   return (
     <AsyncSelect
+      defaultInputValue="Current Location"
       onChange={handleCityChange}
       defaultOptions={cityOptions.map((city, index) => {
         return {

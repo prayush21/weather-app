@@ -2,7 +2,7 @@ import React from "react";
 import Image from "next/image";
 import { useSelector } from "react-redux";
 import { displayTemp, hourlyMap, weekDayMap } from "@/lib/utils";
-import weatherIconSvg from "../../public/weatherIcon.svg";
+import Skeleton from "react-loading-skeleton"; // Import the Skeleton component
 import W01dIcon from "../../public/weather/01d@2x.png";
 import W02dIcon from "../../public/weather/02d@2x.png";
 import W03dIcon from "../../public/weather/03d@2x.png";
@@ -48,12 +48,15 @@ function WeatherList() {
     (state) => state.weather.forecastDuration
   );
   const temperatureUnit = useSelector((state) => state.weather.temperatureUnit);
+  const status = useSelector((state) => state.weather.status);
 
   const dailyData = useSelector((state) => state.weather.cityWeather.dailyData);
   const hourlyData = useSelector(
     (state) => state.weather.cityWeather.hourlyData
   );
   const listItems = forecastDuration == "HOURLY" ? hourlyData : dailyData;
+
+  const skeletonCount = forecastDuration === "HOURLY" ? 24 : 7;
   return (
     // <div className="my-10 px-4 flex gap-1">
     // <div className="my-10 px-4 grid grid-cols-7 gap-2 overflow-x-scroll">
@@ -69,44 +72,48 @@ function WeatherList() {
     //   })}
     // </div>
     <div className={`my-5 flex overflow-x-auto no-scrollbar w-full`}>
-      {listItems.map(({ dt, temp_max, temp_min, temp, weather }, index) => {
-        // let weekDayIndex = new Date(dt).getDay();
-        const newWeekDayIndex = (new Date().getDay() + index) % 7;
-        const newHourIndex = (new Date().getHours() + index) % 24;
+      {status == "idle"
+        ? listItems.map(({ dt, temp_max, temp_min, temp, weather }, index) => {
+            const newWeekDayIndex = (new Date().getDay() + index) % 7;
+            const newHourIndex = (new Date().getHours() + index) % 24;
+            const { icon } = Array.isArray(weather) && weather[0];
+            let title =
+              forecastDuration === "HOURLY"
+                ? hourlyMap[newHourIndex]
+                : weekDayMap[newWeekDayIndex];
 
-        const { icon } = Array.isArray(weather) && weather[0];
-        let title =
-          forecastDuration == "HOURLY"
-            ? hourlyMap[newHourIndex]
-            : weekDayMap[newWeekDayIndex];
-
-        return (
-          <div
-            key={dt}
-            className="bg-white min-h-36 min-w-32 max-w-72 p-4 rounded-3xl mr-2 flex flex-col items-center gap-2"
-          >
-            <div className=" text-sm">{title}</div>
-            <Image src={iconMap[icon]} alt="weather-icon" />
-            <div className=" text-pretty text-sm">
-              {temp ? (
-                <span className="">
-                  {displayTemp(temp, temperatureUnit)}&deg;
-                </span>
-              ) : (
-                <>
-                  {" "}
-                  <span className="">
-                    {displayTemp(temp_max, temperatureUnit)}&deg;
-                  </span>{" "}
-                  <span className="text-gray-500">
-                    {displayTemp(temp_min, temperatureUnit)}&deg;
-                  </span>
-                </>
-              )}
+            return (
+              <div
+                key={dt}
+                className="bg-white min-h-48 min-w-32 max-w-72 p-4 rounded-3xl mr-2 flex flex-col items-center gap-2"
+              >
+                <div className="text-sm">{title}</div>
+                <Image src={iconMap[icon]} alt="weather-icon" />
+                <div className="text-pretty text-sm">
+                  {temp ? (
+                    <span>{displayTemp(temp, temperatureUnit)}&deg;</span>
+                  ) : (
+                    <>
+                      <span>{displayTemp(temp_max, temperatureUnit)}&deg;</span>{" "}
+                      <span className="text-gray-500">
+                        {displayTemp(temp_min, temperatureUnit)}&deg;
+                      </span>
+                    </>
+                  )}
+                </div>
+              </div>
+            );
+          })
+        : Array.from({ length: skeletonCount }, (_, index) => (
+            <div
+              key={index}
+              className="bg-white min-h-48 min-w-32 max-w-72 p-4 rounded-3xl mr-2 flex flex-col items-center justify-between gap-2"
+            >
+              <Skeleton height={20} width={50} />
+              <Skeleton height={50} width={50} circle={true} />
+              <Skeleton height={20} width={30} />
             </div>
-          </div>
-        );
-      })}
+          ))}
     </div>
   );
 }
