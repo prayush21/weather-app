@@ -3,8 +3,7 @@
 import Main from "@/components/main";
 import Sider from "@/components/sider";
 import { getWeatherData } from "@/features/weatherSlice";
-import axiosInstance from "@/lib/axiosConfig";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 const params = {
   // lat: 28.6138954,
@@ -18,18 +17,31 @@ const params = {
 };
 export default function Home() {
   const dispatch = useDispatch();
-  // console.log("getWeatherData", getWeatherData);
-  useEffect(() => {
-    // axiosInstance
-    //   .get("", {
-    //     params: params,
-    //   })
-    //   .then((res) => {
-    //     console.log("res", res);
-    //   });
-    dispatch(getWeatherData(params));
-  }, [dispatch]);
 
+  useEffect(() => {
+    const getUserLocation = () => {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            const { latitude, longitude } = position.coords;
+            const params = {
+              lat: latitude,
+              lon: longitude,
+              units: "metric",
+            };
+            dispatch(getWeatherData(params));
+          },
+          (error) => {
+            console.error("Error getting user location:", error);
+          }
+        );
+      } else {
+        console.error("Geolocation is not supported by this browser.");
+      }
+    };
+
+    getUserLocation();
+  }, [dispatch]); // Only run this effect on mount
   return (
     <main className=" w-screen h-screen sm:px-10 py-5">
       <div className="max-w-full w-full h-full m-auto grid grid-flow-row sm:grid-cols-4 rounded-xl">

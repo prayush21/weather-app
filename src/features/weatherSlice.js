@@ -1,9 +1,10 @@
-import axiosInstance from "@/lib/axiosConfig";
+import { weatherAxiosInstance } from "@/lib/axiosConfig";
 
 const { createSlice, createAsyncThunk } = require("@reduxjs/toolkit");
 
 const initialState = {
   status: "idle",
+  currentCityIndex: null,
   cityOptions: [
     {
       name: "New York County",
@@ -309,7 +310,7 @@ export const getWeatherData = createAsyncThunk(
   "weather/get-data",
   async (params, thunkAPI) => {
     try {
-      const response = await axiosInstance.get("", {
+      const response = await weatherAxiosInstance.get("", {
         params,
       });
       console.log("res", response.data);
@@ -329,6 +330,9 @@ const weatherSlice = createSlice({
     },
     toggleTemperatureUnit: (state, action) => {
       state.temperatureUnit = action.payload;
+    },
+    selectCity: (state, action) => {
+      state.currentCityIndex = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -367,7 +371,7 @@ const weatherSlice = createSlice({
   },
 });
 
-export const { toggleForecastDuration, toggleTemperatureUnit } =
+export const { toggleForecastDuration, toggleTemperatureUnit, selectCity } =
   weatherSlice.actions;
 
 export default weatherSlice.reducer;

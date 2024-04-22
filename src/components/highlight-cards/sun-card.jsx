@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 
 function SunCard() {
   const current = useSelector((state) => state.weather.cityWeather.current);
+  console.log("curr", current);
   const sunrise = new Date(current.sunrise);
   const sunset = new Date(current.sunset);
   return (

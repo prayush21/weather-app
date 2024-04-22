@@ -53,7 +53,6 @@ function CurrentWeather() {
   const icon = Array.isArray(current?.weather)
     ? current?.weather[0]?.icon
     : "-";
-  console.log("curr", `/../../public/weather/${icon}@2x.png`, current);
 
   return (
     <div className=" w-full flex flex-col gap-3 grow justify-evenly py-4 px-1">

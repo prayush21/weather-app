@@ -73,7 +73,7 @@ function WeatherList() {
         // let weekDayIndex = new Date(dt).getDay();
         const newWeekDayIndex = (new Date().getDay() + index) % 7;
         const newHourIndex = (new Date().getHours() + index) % 24;
-        console.log("newHourIndex", newHourIndex);
+
         const { icon } = Array.isArray(weather) && weather[0];
         let title =
           forecastDuration == "HOURLY"

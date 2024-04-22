@@ -1,19 +1,15 @@
 "use client";
 
+import { getWeatherData, selectCity } from "@/features/weatherSlice";
 import React from "react";
+import { useDispatch, useSelector } from "react-redux";
 import AsyncSelect from "react-select/async";
-
-const optionsArray = [
-  { label: "New York", value: 1 },
-  { label: "Mumbai", value: 2 },
-  { label: "Delhi", value: 3 },
-];
 
 const filterOptions = (inputValue) => {
   return optionsArray;
 };
 
-const promiseOptions = (inputValue) => {
+const promiseOptions = (inputValue, options) => {
   return new Promise((resolve) => {
     setTimeout(() => {
       resolve(filterOptions(inputValue));
@@ -22,7 +18,31 @@ const promiseOptions = (inputValue) => {
 };
 
 function SearchInput() {
-  return <AsyncSelect defaultOptions loadOptions={promiseOptions} />;
+  const dispatch = useDispatch();
+  const cityOptions = useSelector((state) => state.weather.cityOptions);
+  async function handleCityChange(newValue) {
+    let { coords, value } = newValue;
+    let params = {
+      lat: coords.lat,
+      lon: coords.lon,
+      units: "metric",
+    };
+    dispatch(selectCity(value));
+    await dispatch(getWeatherData(params)).unwrap();
+  }
+  return (
+    <AsyncSelect
+      onChange={handleCityChange}
+      defaultOptions={cityOptions.map((city, index) => {
+        return {
+          label: city.name,
+          value: index,
+          coords: { lat: city.lat, lon: city.lon },
+        };
+      })}
+      loadOptions={promiseOptions}
+    />
+  );
 }
 
 export default SearchInput;
