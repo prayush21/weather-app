@@ -1,46 +1,59 @@
 import React from "react";
-import weatherIconSvg from "../../public/weatherIcon.svg";
 import Image from "next/image";
+import { useSelector } from "react-redux";
+import { displayTemp, hourlyMap, weekDayMap } from "@/lib/utils";
+import weatherIconSvg from "../../public/weatherIcon.svg";
+import W01dIcon from "../../public/weather/01d@2x.png";
+import W02dIcon from "../../public/weather/02d@2x.png";
+import W03dIcon from "../../public/weather/03d@2x.png";
+import W04dIcon from "../../public/weather/04d@2x.png";
+import W09dIcon from "../../public/weather/09d@2x.png";
+import W10dIcon from "../../public/weather/10d@2x.png";
+import W11dIcon from "../../public/weather/11d@2x.png";
+import W13dIcon from "../../public/weather/13d@2x.png";
+import W50dIcon from "../../public/weather/50d@2x.png";
+import W01nIcon from "../../public/weather/01n@2x.png";
+import W02nIcon from "../../public/weather/02n@2x.png";
+import W03nIcon from "../../public/weather/03n@2x.png";
+import W04nIcon from "../../public/weather/04n@2x.png";
+import W09nIcon from "../../public/weather/09n@2x.png";
+import W10nIcon from "../../public/weather/10n@2x.png";
+import W11nIcon from "../../public/weather/11n@2x.png";
+import W13nIcon from "../../public/weather/13n@2x.png";
+import W50nIcon from "../../public/weather/50n@2x.png";
 
-const weekListItems = [
-  { title: "Sun", icon: weatherIconSvg, maxTemp: 15, minTemp: -3 },
-  { title: "Mon", icon: weatherIconSvg, maxTemp: 20, minTemp: 5 },
-  { title: "Tue", icon: weatherIconSvg, maxTemp: 18, minTemp: 3 },
-  { title: "Wed", icon: weatherIconSvg, maxTemp: 22, minTemp: 8 },
-  { title: "Thu", icon: weatherIconSvg, maxTemp: 17, minTemp: 2 },
-  { title: "Fri", icon: weatherIconSvg, maxTemp: 21, minTemp: 7 },
-  { title: "Sat", icon: weatherIconSvg, maxTemp: 19, minTemp: 4 },
-];
-
-const weatherListItems = [
-  { title: "12AM", icon: weatherIconSvg, maxTemp: 15, minTemp: -3 },
-  { title: "1AM", icon: weatherIconSvg, maxTemp: 20, minTemp: 5 },
-  { title: "2AM", icon: weatherIconSvg, maxTemp: 18, minTemp: 3 },
-  { title: "3AM", icon: weatherIconSvg, maxTemp: 22, minTemp: 8 },
-  { title: "4AM", icon: weatherIconSvg, maxTemp: 17, minTemp: 2 },
-  { title: "5AM", icon: weatherIconSvg, maxTemp: 21, minTemp: 7 },
-  { title: "6AM", icon: weatherIconSvg, maxTemp: 19, minTemp: 4 },
-  { title: "7AM", icon: weatherIconSvg, maxTemp: 15, minTemp: -3 },
-  { title: "8AM", icon: weatherIconSvg, maxTemp: 20, minTemp: 5 },
-  { title: "9AM", icon: weatherIconSvg, maxTemp: 18, minTemp: 3 },
-  { title: "10AM", icon: weatherIconSvg, maxTemp: 22, minTemp: 8 },
-  { title: "11AM", icon: weatherIconSvg, maxTemp: 17, minTemp: 2 },
-  { title: "12PM", icon: weatherIconSvg, maxTemp: 21, minTemp: 7 },
-  { title: "1PM", icon: weatherIconSvg, maxTemp: 19, minTemp: 4 },
-  { title: "2PM", icon: weatherIconSvg, maxTemp: 15, minTemp: -3 },
-  { title: "3PM", icon: weatherIconSvg, maxTemp: 20, minTemp: 5 },
-  { title: "4PM", icon: weatherIconSvg, maxTemp: 18, minTemp: 3 },
-  { title: "5PM", icon: weatherIconSvg, maxTemp: 22, minTemp: 8 },
-  { title: "6PM", icon: weatherIconSvg, maxTemp: 17, minTemp: 2 },
-  { title: "7PM", icon: weatherIconSvg, maxTemp: 21, minTemp: 7 },
-  { title: "8PM", icon: weatherIconSvg, maxTemp: 19, minTemp: 4 },
-  { title: "9PM", icon: weatherIconSvg, maxTemp: 15, minTemp: -3 },
-  { title: "10PM", icon: weatherIconSvg, maxTemp: 20, minTemp: 5 },
-  { title: "11PM", icon: weatherIconSvg, maxTemp: 18, minTemp: 3 },
-];
+const iconMap = {
+  "01d": W01dIcon,
+  "02d": W02dIcon,
+  "03d": W03dIcon,
+  "04d": W04dIcon,
+  "09d": W09dIcon,
+  "10d": W10dIcon,
+  "11d": W11dIcon,
+  "13d": W13dIcon,
+  "50d": W50dIcon,
+  "01n": W01nIcon,
+  "02n": W02nIcon,
+  "03n": W03nIcon,
+  "04n": W04nIcon,
+  "09n": W09nIcon,
+  "10n": W10nIcon,
+  "11n": W11nIcon,
+  "13n": W13nIcon,
+  "50n": W50nIcon,
+};
 
 function WeatherList() {
-  const listItems = weekListItems;
+  const forecastDuration = useSelector(
+    (state) => state.weather.forecastDuration
+  );
+  const temperatureUnit = useSelector((state) => state.weather.temperatureUnit);
+
+  const dailyData = useSelector((state) => state.weather.cityWeather.dailyData);
+  const hourlyData = useSelector(
+    (state) => state.weather.cityWeather.hourlyData
+  );
+  const listItems = forecastDuration == "HOURLY" ? hourlyData : dailyData;
   return (
     // <div className="my-10 px-4 flex gap-1">
     // <div className="my-10 px-4 grid grid-cols-7 gap-2 overflow-x-scroll">
@@ -56,17 +69,40 @@ function WeatherList() {
     //   })}
     // </div>
     <div className={`my-5 flex overflow-x-auto no-scrollbar w-full`}>
-      {listItems.map(({ title, maxTemp, minTemp, icon }, index) => {
+      {listItems.map(({ dt, temp_max, temp_min, temp, weather }, index) => {
+        // let weekDayIndex = new Date(dt).getDay();
+        const newWeekDayIndex = (new Date().getDay() + index) % 7;
+        const newHourIndex = (new Date().getHours() + index) % 24;
+        console.log("newHourIndex", newHourIndex);
+        const { icon } = Array.isArray(weather) && weather[0];
+        let title =
+          forecastDuration == "HOURLY"
+            ? hourlyMap[newHourIndex]
+            : weekDayMap[newWeekDayIndex];
+
         return (
           <div
-            key={title}
+            key={dt}
             className="bg-white min-h-36 min-w-32 max-w-72 p-4 rounded-3xl mr-2 flex flex-col items-center gap-2"
           >
             <div className=" text-sm">{title}</div>
-            <Image src={icon} alt="weather-icon" />
+            <Image src={iconMap[icon]} alt="weather-icon" />
             <div className=" text-pretty text-sm">
-              <span className="">{maxTemp}&deg;</span>{" "}
-              <span className="text-gray-500">{minTemp}&deg;</span>
+              {temp ? (
+                <span className="">
+                  {displayTemp(temp, temperatureUnit)}&deg;
+                </span>
+              ) : (
+                <>
+                  {" "}
+                  <span className="">
+                    {displayTemp(temp_max, temperatureUnit)}&deg;
+                  </span>{" "}
+                  <span className="text-gray-500">
+                    {displayTemp(temp_min, temperatureUnit)}&deg;
+                  </span>
+                </>
+              )}
             </div>
           </div>
         );

@@ -1,6 +1,9 @@
-const { createSlice } = require("@reduxjs/toolkit");
+import axiosInstance from "@/lib/axiosConfig";
+
+const { createSlice, createAsyncThunk } = require("@reduxjs/toolkit");
 
 const initialState = {
+  status: "idle",
   cityOptions: [
     {
       name: "New York County",
@@ -293,13 +296,78 @@ const initialState = {
       state: "Karnataka",
     },
   ],
-  weatherData: {},
+  cityWeather: {
+    current: {},
+    dailyData: [],
+    hourlyData: [],
+  },
+  forecastDuration: "HOURLY",
+  temperatureUnit: "C",
 };
+
+export const getWeatherData = createAsyncThunk(
+  "weather/get-data",
+  async (params, thunkAPI) => {
+    try {
+      const response = await axiosInstance.get("", {
+        params,
+      });
+      console.log("res", response.data);
+      return response.data;
+    } catch (error) {
+      console.log("Weather API Error", error);
+    }
+  }
+);
 
 const weatherSlice = createSlice({
   name: "weather",
   initialState,
-  reducers: {},
+  reducers: {
+    toggleForecastDuration: (state, action) => {
+      state.forecastDuration = action.payload;
+    },
+    toggleTemperatureUnit: (state, action) => {
+      state.temperatureUnit = action.payload;
+    },
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(getWeatherData.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(getWeatherData.fulfilled, (state, action) => {
+        const { current, hourly, daily } = action.payload;
+
+        const updatedHourly = hourly.slice(0, 24).map((data) => {
+          return {
+            dt: data.dt,
+            temp: data.temp,
+            weather: data.weather,
+          };
+        });
+        const updatedDaily = daily.slice(0, 7).map((data) => {
+          return {
+            dt: data.dt,
+            temp_max: data.temp.max,
+            temp_min: data.temp.min,
+            weather: data.weather,
+          };
+        });
+
+        state.cityWeather.current = current;
+        state.cityWeather.hourlyData = updatedHourly;
+        state.cityWeather.dailyData = updatedDaily;
+        state.status = "idle";
+      })
+      .addCase(getWeatherData.rejected, (state, action) => {
+        state.status = "error";
+        state.error = action.error.message;
+      });
+  },
 });
+
+export const { toggleForecastDuration, toggleTemperatureUnit } =
+  weatherSlice.actions;
 
 export default weatherSlice.reducer;

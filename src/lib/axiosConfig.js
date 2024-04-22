@@ -2,6 +2,7 @@ import axios from "axios";
 
 const axiosInstance = axios.create({
   baseURL: "https://api.openweathermap.org/data/3.0/onecall",
+  //   baseURL: "https://api.openweathermap.org/data/2.5/weather",
 });
 
 axiosInstance.interceptors.request.use(

@@ -1,7 +1,10 @@
 import React from "react";
-import UVHighlightCard from "./uv-highlight-card";
-import HighlightCard from "./highlight-card";
-import SunHighlightCard from "./sun-highlight-card";
+import UVCard from "./highlight-cards/uv-card";
+import WindCard from "./highlight-cards/wind-card";
+import SunCard from "./highlight-cards/sun-card";
+import HumidityCard from "./highlight-cards/humidity-card";
+import VisibilityCard from "./highlight-cards/visibility-card";
+import AirQualityCard from "./highlight-cards/air-card";
 
 function WeatherHighlights() {
   const highlightsList = [
@@ -40,7 +43,7 @@ function WeatherHighlights() {
     <div className="flex flex-col min-h-fit gap-4 grow">
       <div className="font-medium grow-0">Today&#39;s Highlights</div>
       <div className="grid grid-cols-3 grid-rows-12 gap-4 grow w-full h-full">
-        {highlightsList.map(({ id, cardType, title }) => {
+        {/* {highlightsList.map(({ id, cardType, title }) => {
           return cardType == "uv" ? (
             <UVHighlightCard title={title} id={id} />
           ) : cardType == "sun" ? (
@@ -48,7 +51,13 @@ function WeatherHighlights() {
           ) : (
             <HighlightCard title={title} id={id} />
           );
-        })}
+        })} */}
+        <UVCard />
+        <WindCard />
+        <SunCard />
+        <HumidityCard />
+        <VisibilityCard />
+        <AirQualityCard />
       </div>
     </div>
   );

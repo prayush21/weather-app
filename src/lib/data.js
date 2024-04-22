@@ -1,3 +1,5 @@
+import weatherIconSvg from "../../public/weatherIcon.svg";
+
 export const citys = [
   {
     name: "New York County",
@@ -289,4 +291,41 @@ export const citys = [
     country: "IN",
     state: "Karnataka",
   },
+];
+
+export const weekListItems = [
+  { title: "Sun", icon: weatherIconSvg, maxTemp: 15, minTemp: -3 },
+  { title: "Mon", icon: weatherIconSvg, maxTemp: 20, minTemp: 5 },
+  { title: "Tue", icon: weatherIconSvg, maxTemp: 18, minTemp: 3 },
+  { title: "Wed", icon: weatherIconSvg, maxTemp: 22, minTemp: 8 },
+  { title: "Thu", icon: weatherIconSvg, maxTemp: 17, minTemp: 2 },
+  { title: "Fri", icon: weatherIconSvg, maxTemp: 21, minTemp: 7 },
+  { title: "Sat", icon: weatherIconSvg, maxTemp: 19, minTemp: 4 },
+];
+
+export const hourlyListItems = [
+  { title: "12AM", icon: weatherIconSvg, maxTemp: 15, minTemp: -3 },
+  { title: "1AM", icon: weatherIconSvg, maxTemp: 20, minTemp: 5 },
+  { title: "2AM", icon: weatherIconSvg, maxTemp: 18, minTemp: 3 },
+  { title: "3AM", icon: weatherIconSvg, maxTemp: 22, minTemp: 8 },
+  { title: "4AM", icon: weatherIconSvg, maxTemp: 17, minTemp: 2 },
+  { title: "5AM", icon: weatherIconSvg, maxTemp: 21, minTemp: 7 },
+  { title: "6AM", icon: weatherIconSvg, maxTemp: 19, minTemp: 4 },
+  { title: "7AM", icon: weatherIconSvg, maxTemp: 15, minTemp: -3 },
+  { title: "8AM", icon: weatherIconSvg, maxTemp: 20, minTemp: 5 },
+  { title: "9AM", icon: weatherIconSvg, maxTemp: 18, minTemp: 3 },
+  { title: "10AM", icon: weatherIconSvg, maxTemp: 22, minTemp: 8 },
+  { title: "11AM", icon: weatherIconSvg, maxTemp: 17, minTemp: 2 },
+  { title: "12PM", icon: weatherIconSvg, maxTemp: 21, minTemp: 7 },
+  { title: "1PM", icon: weatherIconSvg, maxTemp: 19, minTemp: 4 },
+  { title: "2PM", icon: weatherIconSvg, maxTemp: 15, minTemp: -3 },
+  { title: "3PM", icon: weatherIconSvg, maxTemp: 20, minTemp: 5 },
+  { title: "4PM", icon: weatherIconSvg, maxTemp: 18, minTemp: 3 },
+  { title: "5PM", icon: weatherIconSvg, maxTemp: 22, minTemp: 8 },
+  { title: "6PM", icon: weatherIconSvg, maxTemp: 17, minTemp: 2 },
+  { title: "7PM", icon: weatherIconSvg, maxTemp: 21, minTemp: 7 },
+  { title: "8PM", icon: weatherIconSvg, maxTemp: 19, minTemp: 4 },
+  { title: "9PM", icon: weatherIconSvg, maxTemp: 15, minTemp: -3 },
+  { title: "10PM", icon: weatherIconSvg, maxTemp: 20, minTemp: 5 },
+  { title: "11PM", icon: weatherIconSvg, maxTemp: 18, minTemp: 3 },
 ];
