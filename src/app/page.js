@@ -2,7 +2,7 @@
 
 import Main from "@/components/main";
 import Sider from "@/components/sider";
-import { getWeatherData } from "@/features/weatherSlice";
+import { getWeatherData, addCurrentLocation } from "@/features/weatherSlice";
 import { Suspense, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import Loading from "./loading";
@@ -21,6 +21,7 @@ export default function Home() {
               lon: longitude,
               units: "metric",
             };
+            dispatch(addCurrentLocation({ lat: latitude, lon: longitude }));
             dispatch(getWeatherData(params));
           },
           (error) => {
