@@ -72,7 +72,7 @@ function WeatherList() {
     //   })}
     // </div>
     <div className={`my-5 flex overflow-x-auto no-scrollbar w-full`}>
-      {status == "idle"
+      {listItems.length != 0 && status == "idle"
         ? listItems.map(({ dt, temp_max, temp_min, temp, weather }, index) => {
             const newWeekDayIndex = (new Date().getDay() + index) % 7;
             const newHourIndex = (new Date().getHours() + index) % 24;

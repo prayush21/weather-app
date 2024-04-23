@@ -21,7 +21,6 @@ function City() {
           params: { query: name, page: 1, per_page: 1 },
         })
         .then((res) => {
-          console.log("res", res.data);
           const { results } = res.data;
           const { urls } = results[0];
 

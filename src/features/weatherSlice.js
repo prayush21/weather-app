@@ -313,11 +313,9 @@ export const getWeatherData = createAsyncThunk(
       const response = await weatherAxiosInstance.get("", {
         params,
       });
-      console.log("res", response.data);
+
       return response.data;
-    } catch (error) {
-      console.log("Weather API Error", error);
-    }
+    } catch (error) {}
   }
 );
 

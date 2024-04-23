@@ -57,21 +57,21 @@ function CurrentWeather() {
   const icon = Array.isArray(current?.weather)
     ? current?.weather[0]?.icon
     : "-";
-  console.log("status", status);
+
   return (
     <div className=" w-full flex flex-col gap-3 grow justify-evenly py-4 px-1">
-      {status == "idle" ? (
+      {status == "idle" && icon != "-" ? (
         <Image
           className="self-center"
           src={iconMap[icon]}
-          height={180}
-          width={180}
+          height={170}
+          width={170}
           alt="current-weather-icon"
         />
       ) : (
         <Skeleton height={180} circle />
       )}
-      {status == "idle" ? (
+      {status == "idle" && Object.keys(current).length != 0 ? (
         <div style={{ fontWeight: "300" }} className="text-8xl">
           {displayTemp(current.temp, temperatureUnit)}
           <span className=" text-4xl">&deg;{temperatureUnit}</span>
@@ -87,18 +87,18 @@ function CurrentWeather() {
         </span>
       </div>
       <hr></hr>
-      {status == "idle" ? (
+      {status == "idle" && main != "-" ? (
         <div className=" text-sm font-normal">{main}</div>
       ) : (
-        <Skeleton count={1} />
+        <Skeleton count={1} width={50} />
       )}
-      {status == "idle" ? (
+      {status == "idle" && Object.keys(current).length != 0 ? (
         <div className=" text-sm font-normal">
           Feels like {displayTemp(current.feels_like, temperatureUnit)}&deg;
           {temperatureUnit}
         </div>
       ) : (
-        <Skeleton count={1} />
+        <Skeleton count={1} width={70} />
       )}
     </div>
   );
