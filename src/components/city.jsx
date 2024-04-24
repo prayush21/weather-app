@@ -1,30 +1,32 @@
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
-import NewYork from "../../public/new-york.avif";
+import defaultImage from "../../public/default.avif";
 import { useSelector } from "react-redux";
 import { unsplashAxiosInstance } from "@/lib/axiosConfig";
 function City() {
-  const cityOptions = useSelector((state) => state.weather.cityOptions);
-  const currentCityIndex = useSelector(
-    (state) => state.weather.currentCityIndex
+  const cachedCityOptions = useSelector(
+    (state) => state.weather.cachedCityOptions
   );
-  const { name, state, country } = cityOptions[currentCityIndex] ?? "";
-  const nameTitle = name
-    ? `${name}, ${state ? `${state},` : ""} ${country}`
-    : "Current Location";
-  const [srcImage, setSrcImage] = useState(NewYork);
+  const currentCityName = useSelector((state) => state.weather.currentCityName);
+  const { name, state, country } =
+    cachedCityOptions.find((option) => option.name == currentCityName) ?? "";
+  let nameTitle = "";
+  if (!name || name == "Current Location") nameTitle = "Current Location";
+  else nameTitle = `${name}, ${state ? `${state},` : ""} ${country}`;
 
+  const [srcImage, setSrcImage] = useState(defaultImage);
+  console.log("name", name);
   useEffect(() => {
-    if (name) {
+    if (name && name != "Current Location") {
       unsplashAxiosInstance
         .get("/search/photos", {
           params: { query: name, page: 1, per_page: 1 },
         })
         .then((res) => {
-          const { results } = res.data;
-          const { urls } = results[0];
+          const { results } = res.data ?? [];
+          const { urls } = results.length == 0 ? null : results[0];
 
-          setSrcImage(urls.regular);
+          setSrcImage(urls ? urls.regular : de);
         });
     }
   }, [name]);
@@ -32,7 +34,7 @@ function City() {
   return (
     <div className=" relative w-full rounded-3xl">
       <Image
-        className="object-cover w-72 h-32 rounded-3xl brightness-50"
+        className="object-cover w-72 h-32 rounded-3xl brightness-70"
         src={srcImage}
         alt="city"
         width={280}

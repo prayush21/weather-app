@@ -16,13 +16,19 @@ export default function Home() {
         navigator.geolocation.getCurrentPosition(
           (position) => {
             const { latitude, longitude } = position.coords;
-            const params = {
-              lat: latitude,
-              lon: longitude,
-              units: "metric",
-            };
-            dispatch(addCurrentLocation({ lat: latitude, lon: longitude }));
-            dispatch(getWeatherData(params));
+
+            // dispatch(addCurrentLocation({ lat: latitude, lon: longitude }));
+            dispatch(
+              getWeatherData({
+                lat: latitude,
+                lon: longitude,
+                country: "",
+                name: "Current Location",
+                value: "Current Location",
+                state: "",
+                label: "Current Location",
+              })
+            );
           },
           (error) => {
             console.error("Error getting user location:", error);

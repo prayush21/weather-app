@@ -9,6 +9,22 @@ const unsplashAxiosInstance = axios.create({
   baseURL: "https://api.unsplash.com",
 });
 
+const geoAxiosInstance = axios.create({
+  baseURL: "http://api.openweathermap.org/geo/1.0/direct",
+});
+
+geoAxiosInstance.interceptors.request.use(
+  function (config) {
+    // Do something before request is sent
+    config.params["appid"] = "5054178baa6ff4cb4e976f1e3345a1fa";
+    return config;
+  },
+  function (error) {
+    // Do something with request error
+    return Promise.reject(error);
+  }
+);
+
 unsplashAxiosInstance.interceptors.request.use(
   function (config) {
     // Do something before request is sent
@@ -33,4 +49,4 @@ weatherAxiosInstance.interceptors.request.use(
   }
 );
 
-export { weatherAxiosInstance, unsplashAxiosInstance };
+export { weatherAxiosInstance, unsplashAxiosInstance, geoAxiosInstance };
