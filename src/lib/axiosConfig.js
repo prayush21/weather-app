@@ -10,7 +10,7 @@ const unsplashAxiosInstance = axios.create({
 });
 
 const geoAxiosInstance = axios.create({
-  baseURL: "http://api.openweathermap.org/geo/1.0/direct",
+  baseURL: "https://api.openweathermap.org/geo/1.0/direct",
 });
 
 geoAxiosInstance.interceptors.request.use(
